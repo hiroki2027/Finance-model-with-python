@@ -1,13 +1,44 @@
+## phase2　データ収集と前処理
+##### 修正済み #####
+
+import yfinance as yf
+
 import numpy as np
 import pandas as pd
+from datetime import datetime 
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+
 import os
+import glob
 
-# 1. combined CSV (RSI_month_end + momentum_3m が含まれている)を読み込む
-file_path = "/Users/kondousatoshishi/Downloads/金融モデル/data/date_RSI_momentum/4063.T_month_end_with_RSI_momentum.csv"
-df = pd.read_csv(file_path, parse_dates=["Date"], index_col="Date")
+os.makedirs("data", exist_ok=True)
 
+tickers = {
+    "7203.T", "9984.T", "8306.T", "6758.T", "9432.T",
+    "4063.T", "6981.T", "7733.T", "8058.T", "6861.T"
+}
+
+# データ収集
+start_date = "2013-06-01"
+end_date = datetime.today().strftime("%Y-%m-%d")
+
+# 日足データを取得して保存
+for ticker in tickers:
+    df = yf.download(ticker, start=start_date, end=end_date, interval="1d")
+    df.dropna(inplace=True)
+    df.to_csv(f"data/{ticker}_day.csv")
+    print(f"Saved: {ticker}")
+
+all_files = glob.glob("data/*_day.csv")
+df_list = []
+for file in all_files:
+    temp_df = pd.read_csv(file, header=0, index_col=0)
+    temp_df.index = pd.to_datetime(temp_df.index, format="%Y-%m-%d", errors="coerce")
+    df_list.append(temp_df)
+df = pd.concat(df_list, axis=0).sort_index()
+###### 修正済み ######
 print(df.head())
 
 # 2. 目的変数　taget を作成: 翌月の終値が上がるかどうか
@@ -39,5 +70,4 @@ print("=== モデル評価（最終10か月テスト） ===")
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Classification Report:")
 print(classification_report(y_test, y_pred))
-
 
