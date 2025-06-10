@@ -36,7 +36,7 @@ for file in all_files:
     temp_df.index.name = "Date"
     print(temp_df)
     
-    # Close列を float　に変換
+    # Close列sを float　に変換
     temp_df["Close"] = pd.to_numeric(temp_df["Close"], errors="coerce")
     
     # 日足RSI(14)を計算

@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.exceptions import UndefinedMetricWarning
+import warnings
+warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 import os
 
 # 1. combined CSV (RSI_month_end + momentum_3m が含まれている)を読み込む
@@ -38,6 +41,4 @@ y_pred = model.predict(X_test)
 print("=== モデル評価（最終10か月テスト） ===")
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Classification Report:")
-print(classification_report(y_test, y_pred))
-
-
+print(classification_report(y_test, y_pred, zero_division=0))

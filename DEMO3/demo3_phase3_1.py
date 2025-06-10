@@ -31,6 +31,7 @@ for ticker in tickers:
     df.to_csv(f"data/{ticker}_day.csv")
     print(f"Saved: {ticker}")
 
+###### これはいらない ######
 all_files = glob.glob("data/*_day.csv")
 df_list = []
 for file in all_files:
@@ -38,6 +39,9 @@ for file in all_files:
     temp_df.index = pd.to_datetime(temp_df.index, format="%Y-%m-%d", errors="coerce")
     df_list.append(temp_df)
 df = pd.concat(df_list, axis=0).sort_index()
+###### これはいらない ######
+
+
 ###### 修正済み ######
 print(df.head())
 
