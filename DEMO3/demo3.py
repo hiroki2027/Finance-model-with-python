@@ -38,6 +38,9 @@ for file in all_files:
     
     # Close列sを float　に変換
     temp_df["Close"] = pd.to_numeric(temp_df["Close"], errors="coerce")
+    # Open, High, Low 列も float に変換（計算エラー防止）
+    for col in ["Open", "High", "Low"]:
+        temp_df[col] = pd.to_numeric(temp_df[col], errors="coerce")
     
     # 日足RSI(14)を計算
     temp_df["RSI_daily"] = compute_rsi(temp_df["Close"], period=14)

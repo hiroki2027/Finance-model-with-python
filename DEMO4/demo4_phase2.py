@@ -27,3 +27,4 @@ for ticker in tickers:
     print(f"Saves: {ticker}")
     
 all_files = glob.glob("data4/day_data/*_day.csv")
+
